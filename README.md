@@ -74,6 +74,8 @@ sudo python3 hackingtool.py
 
 Navigate the interactive menu using the number keys to select a category and then a specific tool.
 
+> **Note (personal):** I've been testing this primarily on Ubuntu 22.04 — works well out of the box. On Kali you may need to run `apt update` before installing some of the individual tools.
+
 ---
 
 ## 🗂️ Tool Categories
@@ -133,20 +135,8 @@ Contributions are welcome! Please read our [contributing guidelines](.github/PUL
 4. Push to the branch (`git push origin feat/new-tool`)
 5. Open a Pull Request
 
-### Reporting Bugs
-
-Use the [bug report template](.github/ISSUE_TEMPLATE/bug_report.md) when opening issues.
-
-### Requesting Tools
-
-Use the [tool request template](.github/ISSUE_TEMPLATE/tool_request.md) to suggest new tools.
-
 ---
 
 ## 📄 License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
----
-
-<p align="center">Made with ❤️ for the security community</p>
