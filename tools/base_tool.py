@@ -10,6 +10,10 @@ import shutil
 from abc import ABC, abstractmethod
 from typing import Optional
 
+# Default directory where cloned tools will be stored.
+# Change this to "~/tools" or another path if you don't want to use /opt/
+DEFAULT_CLONE_DIR = "/opt"
+
 
 class BaseTool(ABC):
     """Abstract base class for all hacking tools."""
@@ -60,8 +64,8 @@ class BaseTool(ABC):
         return False
 
     def _clone_repo(self) -> bool:
-        """Clone the tool's repository into /opt/."""
-        dest = f"/opt/{self.name.lower().replace(' ', '_')}"
+        """Clone the tool's repository into DEFAULT_CLONE_DIR."""
+        dest = os.path.join(DEFAULT_CLONE_DIR, self.name.lower().replace(' ', '_'))
         if os.path.exists(dest):
             print(f"[*] Repository already cloned at {dest}.")
             return True
@@ -86,42 +90,4 @@ class BaseTool(ABC):
             return False
 
     def __str__(self) -> str:
-        status = "installed" if self.is_installed() else "not installed"
-        return f"{self.name} [{status}] — {self.description}"
-
-
-class ToolCategory(ABC):
-    """Abstract base class representing a category of tools."""
-
-    def __init__(self, name: str, description: str):
-        """
-        Initialize a tool category.
-
-        Args:
-            name: Display name of the category.
-            description: Short description of the category's purpose.
-        """
-        self.name = name
-        self.description = description
-        self.tools: list[BaseTool] = []
-
-    def add_tool(self, tool: BaseTool) -> None:
-        """Register a tool within this category."""
-        self.tools.append(tool)
-
-    def display_menu(self) -> None:
-        """Print a numbered menu of all tools in this category."""
-        print(f"\n{'='*50}")
-        print(f"  {self.name}")
-        print(f"  {self.description}")
-        print(f"{'='*50}")
-        for idx, tool in enumerate(self.tools, start=1):
-            installed_marker = "[+]" if tool.is_installed() else "[ ]"
-            print(f"  {idx:>2}. {installed_marker} {tool.name:<30} {tool.description}")
-        print(f"   0. Back to main menu")
-        print(f"{'='*50}")
-
-    @abstractmethod
-    def run(self) -> None:
-        """Present the category menu and handle user selection."""
-        pass
+        return f"{self.name}: {self.description}"
