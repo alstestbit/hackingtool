@@ -11,8 +11,8 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 # Default directory where cloned tools will be stored.
-# Change this to "~/tools" or another path if you don't want to use /opt/
-DEFAULT_CLONE_DIR = "/opt"
+# Using ~/tools instead of /opt/ to avoid needing sudo for cloning.
+DEFAULT_CLONE_DIR = os.path.expanduser("~/tools")
 
 
 class BaseTool(ABC):
@@ -69,6 +69,8 @@ class BaseTool(ABC):
         if os.path.exists(dest):
             print(f"[*] Repository already cloned at {dest}.")
             return True
+        # Ensure the target directory exists before cloning
+        os.makedirs(DEFAULT_CLONE_DIR, exist_ok=True)
         try:
             print(f"[*] Cloning {self.repo_url} into {dest} ...")
             subprocess.run(["git", "clone", self.repo_url, dest], check=True)
@@ -84,10 +86,3 @@ class BaseTool(ABC):
             print(f"[*] Installing {self.name} ...")
             subprocess.run(self.install_command, shell=True, check=True)
             print(f"[+] Successfully installed {self.name}.")
-            return True
-        except subprocess.CalledProcessError as exc:
-            print(f"[!] Installation failed for {self.name}: {exc}")
-            return False
-
-    def __str__(self) -> str:
-        return f"{self.name}: {self.description}"
